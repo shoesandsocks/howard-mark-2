@@ -52,7 +52,7 @@ returns, e.g.,
 }
 ```
 
-Type 3: Get some number of random quotes
+## Type 3: Get some number of random quotes
 
 ```javascript
 {
