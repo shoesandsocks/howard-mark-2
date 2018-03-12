@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+
 import express from 'express';
 
 import { howard } from '../utils/howard';
@@ -7,7 +9,7 @@ export const howardRouter = express.Router();
 howardRouter.post('/', async (req, res) => {
   console.log(req.body);
   const argument = req.body.argument;
-  const kind = parseInt(req.body.kind);
+  const kind = parseInt(req.body.kind, 10);
   if (!argument || !kind) {
     return res.json({ error: 'missing info' });
   }
@@ -17,9 +19,9 @@ howardRouter.post('/', async (req, res) => {
   try {
     switch (kind) {
       case 1:
-        const num = parseInt(argument);
+        const ep = parseInt(argument, 10);
         try {
-          return res.json({ response: await howard('getEpisode', num) });
+          return res.json({ response: await howard('getEpisode', ep) });
         } catch (e) {
           return res.json({
             error: `Something went wrong (probably not an ep #): ${e}`,
@@ -34,7 +36,7 @@ howardRouter.post('/', async (req, res) => {
           });
         }
       case 3:
-        const num = parseInt(argument);
+        const num = parseInt(argument, 10);
         try {
           return res.json({ response: await howard('getQuotes', num) });
         } catch (e) {

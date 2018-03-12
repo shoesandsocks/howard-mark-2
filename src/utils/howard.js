@@ -12,19 +12,8 @@ export const howard = async (query, argument) => {
   const db = await client.db('howard');
   const canon = await db.collection('canon');
   const howie = await db.collection('howard');
-
-  /* randomQuote(num) takes a num and returns that many quotes in an array */
-  const randomQuote = async n => {
-    return await canon
-      .aggregate([
-        { $match: { 'quote.text': { $exists: true } } },
-        { $sample: { size: n } },
-      ])
-      .toArray();
-  };
-
   /* getEpisode(num) return that ep */
-  const getEpisode = async n => {
+  const getEpisode = async (n) => {
     const theEp = await howie.findOne({ 'original.episode': n });
     return theEp.original;
   };
@@ -32,16 +21,13 @@ export const howard = async (query, argument) => {
   /* getRandomEpisode() returns an ep */
   const getRandomEpisode = async () => {
     const array = await howie
-      .aggregate([
-        { $match: { 'original.episode': { $exists: true } } },
-        { $sample: { size: 1 } },
-      ])
+      .aggregate([{ $match: { 'original.episode': { $exists: true } } }, { $sample: { size: 1 } }])
       .toArray();
     return array[0].original;
   };
 
   /* searchQuotes(term) does that */
-  const searchQuotes = async term => {
+  const searchQuotes = async (term) => {
     const foundQuotes = await howie
       .aggregate([
         { $match: { $text: { $search: term } } },
@@ -53,21 +39,16 @@ export const howard = async (query, argument) => {
   };
 
   /* getQuotes() returns the quotes View */
-  const getQuotes = async n => {
+  const getQuotes = async (n) => {
     const getQuoteObjects = await canon
-      .aggregate([
-        { $match: { 'quote.text': { $exists: true } } },
-        { $sample: { size: n } },
-      ])
+      .aggregate([{ $match: { 'quote.text': { $exists: true } } }, { $sample: { size: n } }])
       .toArray();
     return getQuoteObjects.map(q => q.quote);
   };
 
   /* getMarkov(string) returns markov from string seed */
-  const getMarkov = async string => {
-    const numberOfQuotes = await howie
-      .find({ 'original.text': { $exists: true } })
-      .count();
+  const getMarkov = async (string) => {
+    const numberOfQuotes = await howie.find({ 'original.text': { $exists: true } }).count();
     const allQuotesArray = await getQuotes(numberOfQuotes);
     const triads = triadMaker(allQuotesArray.map(q => q.text));
     const markovResult = markov(string, triads);
