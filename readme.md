@@ -1,8 +1,8 @@
 # H.C. Mark 2
 
-current status: backend-only search service, responding to POSTs on `/howard` route.
+Current status: backend-only search service, responding to POSTs on `/howard` route.
 
-post a form-urlencoded body, receive JSON response. Shape of the body must be:
+Post a form-urlencoded body, receive JSON response. Shape of the body must be:
 
 ```javascript
 {
@@ -10,6 +10,8 @@ post a form-urlencoded body, receive JSON response. Shape of the body must be:
   "type": 'a number (or string representation of number) between 1 and 5'
 }
 ```
+
+At the command line, this should work: `curl -d "kind=3&argument=3" -X POST example.com/howard`
 
 ## Type 1: Get a particular episode. Use as follows
 
