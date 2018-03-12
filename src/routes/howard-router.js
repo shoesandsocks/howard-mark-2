@@ -17,9 +17,9 @@ howardRouter.post('/', async (req, res) => {
   try {
     switch (kind) {
       case 1:
-        argument = parseInt(argument);
+        const num = parseInt(argument);
         try {
-          return res.json({ response: await howard('getEpisode', argument) });
+          return res.json({ response: await howard('getEpisode', num) });
         } catch (e) {
           return res.json({
             error: `Something went wrong (probably not an ep #): ${e}`,
@@ -34,9 +34,9 @@ howardRouter.post('/', async (req, res) => {
           });
         }
       case 3:
-        argument = parseInt(argument);
+        const num = parseInt(argument);
         try {
-          return res.json({ response: await howard('getQuotes', argument) });
+          return res.json({ response: await howard('getQuotes', num) });
         } catch (e) {
           return res.json({
             error: `Something went wrong getting some quotes: ${e}`,
