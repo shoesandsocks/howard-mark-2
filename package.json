@@ -1,0 +1,20 @@
+{
+  "name": "@shoesandsocks/howard-mark-2",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./build/main.js",
+  "scripts": {
+    "dev": "backpack",
+    "build": "backpack build",
+    "start": "npm run build && node ./build/main.js"
+  },
+  "keywords": [],
+  "author": "RL Brown, rlbrown72@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "backpack-core": "^0.5.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.4"
+  }
+}
