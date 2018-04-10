@@ -1,5 +1,4 @@
 import MongoClient from 'mongodb';
-// import axios from 'axios';
 
 import { markov } from './markov';
 import { triadMaker } from './triadMaker';
@@ -62,33 +61,6 @@ export const howard = async (query, argument) => {
     return markovResult;
   };
 
-  /* temp? /TODO: remove? ? */
-  // const getAll = async () => {
-  //   const g = 'https://language.googleapis.com/v1beta2/documents:annotateText';
-  //   // await db.collection('howard').find({ 'original.text': { $exists: true } }).forEach((doc) => {
-  //   await db.collection('howard')
-  //     .find({ 'original.text': 'You no longer have an addressable dingus.' })
-  //     .forEach((doc) => {
-  //       const { original: { text }, _id } = doc;
-  //       const submission = {
-  //         document: {
-  //           type: 'PLAIN_TEXT',
-  //           language: 'en',
-  //           content: text,
-  //         },
-  //         features: {
-  //           extractSyntax: true,
-  //           extractEntities: true,
-  //           extractDocumentSentiment: true,
-  //           extractEntitySentiment: true,
-  //           classifyText: true,
-  //         },
-  //         encodingType: 'UTF16',
-  //       };
-  //       axios.post(g, submission).then(response => console.log(response));
-  //     });
-  // };
-
   let returnValue;
   switch (query) {
     case 'getEpisode':
@@ -106,8 +78,6 @@ export const howard = async (query, argument) => {
     case 'getMarkov':
       returnValue = await getMarkov(argument);
       break;
-    // case 'getAll':
-    //   getAll();
     default:
       returnValue = 'That is not a thing.';
   }
