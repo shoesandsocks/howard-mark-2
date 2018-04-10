@@ -12,6 +12,7 @@
   "author": "RL Brown, rlbrown72@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "backpack-core": "^0.5.0",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",

@@ -1,4 +1,6 @@
 import MongoClient from 'mongodb';
+// import axios from 'axios';
+
 import { markov } from './markov';
 import { triadMaker } from './triadMaker';
 
@@ -10,17 +12,17 @@ export const howard = async (query, argument) => {
 
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
-  const canon = await db.collection('canon');
-  const howie = await db.collection('howard');
+
   /* getEpisode(num) return that ep */
   const getEpisode = async (n) => {
-    const theEp = await howie.findOne({ 'original.episode': n });
+    const theEp = await db.collection('howard').findOne({ 'original.episode': n });
     return theEp.original;
   };
 
   /* getRandomEpisode() returns an ep */
   const getRandomEpisode = async () => {
-    const array = await howie
+    const array = await db
+      .collection('howard')
       .aggregate([{ $match: { 'original.episode': { $exists: true } } }, { $sample: { size: 1 } }])
       .toArray();
     return array[0].original;
@@ -28,7 +30,8 @@ export const howard = async (query, argument) => {
 
   /* searchQuotes(term) does that */
   const searchQuotes = async (term) => {
-    const foundQuotes = await howie
+    const foundQuotes = await db
+      .collection('howard')
       .aggregate([
         { $match: { $text: { $search: term } } },
         { $match: { 'original.text': { $exists: true } } },
@@ -40,7 +43,8 @@ export const howard = async (query, argument) => {
 
   /* getQuotes() returns the quotes View */
   const getQuotes = async (n) => {
-    const getQuoteObjects = await canon
+    const getQuoteObjects = await db
+      .collection('canon')
       .aggregate([{ $match: { 'quote.text': { $exists: true } } }, { $sample: { size: n } }])
       .toArray();
     return getQuoteObjects.map(q => q.quote);
@@ -48,25 +52,65 @@ export const howard = async (query, argument) => {
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = async (string) => {
-    const numberOfQuotes = await howie.find({ 'original.text': { $exists: true } }).count();
+    const numberOfQuotes = await db
+      .collection('howard')
+      .find({ 'original.text': { $exists: true } })
+      .count();
     const allQuotesArray = await getQuotes(numberOfQuotes);
     const triads = triadMaker(allQuotesArray.map(q => q.text));
     const markovResult = markov(string, triads);
     return markovResult;
   };
 
+  /* temp? /TODO: remove? ? */
+  // const getAll = async () => {
+  //   const g = 'https://language.googleapis.com/v1beta2/documents:annotateText';
+  //   // await db.collection('howard').find({ 'original.text': { $exists: true } }).forEach((doc) => {
+  //   await db.collection('howard')
+  //     .find({ 'original.text': 'You no longer have an addressable dingus.' })
+  //     .forEach((doc) => {
+  //       const { original: { text }, _id } = doc;
+  //       const submission = {
+  //         document: {
+  //           type: 'PLAIN_TEXT',
+  //           language: 'en',
+  //           content: text,
+  //         },
+  //         features: {
+  //           extractSyntax: true,
+  //           extractEntities: true,
+  //           extractDocumentSentiment: true,
+  //           extractEntitySentiment: true,
+  //           classifyText: true,
+  //         },
+  //         encodingType: 'UTF16',
+  //       };
+  //       axios.post(g, submission).then(response => console.log(response));
+  //     });
+  // };
+
+  let returnValue;
   switch (query) {
     case 'getEpisode':
-      return getEpisode(argument);
+      returnValue = await getEpisode(argument);
+      break;
     case 'getRandomEpisode':
-      return getRandomEpisode();
+      returnValue = await getRandomEpisode();
+      break;
     case 'getQuotes':
-      return getQuotes(argument);
+      returnValue = await getQuotes(argument);
+      break;
     case 'searchQuotes':
-      return searchQuotes(argument);
+      returnValue = await searchQuotes(argument);
+      break;
     case 'getMarkov':
-      return getMarkov(argument);
+      returnValue = await getMarkov(argument);
+      break;
+    // case 'getAll':
+    //   getAll();
     default:
-      return 'That is not a thing.';
+      returnValue = 'That is not a thing.';
   }
+  await client.close();
+  return returnValue;
 };

@@ -7,13 +7,12 @@ import { howard } from '../utils/howard';
 export const howardRouter = express.Router();
 
 howardRouter.post('/', async (req, res) => {
-  console.log(req.body);
-  const argument = req.body.argument;
+  const { argument } = req.body;
   const kind = parseInt(req.body.kind, 10);
   if (!argument || !kind) {
     return res.json({ error: 'missing info' });
   }
-  if (typeof kind !== 'number' || kind < 1 || kind > 5) {
+  if (typeof kind !== 'number' || kind < 1 || kind > 6) {
     return res.json({ error: 'bad kind' });
   }
   try {
