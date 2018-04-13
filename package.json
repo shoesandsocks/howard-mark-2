@@ -16,6 +16,7 @@
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
+    "express-sslify": "^1.2.0",
     "mongodb": "^3.0.4"
   },
   "devDependencies": {
