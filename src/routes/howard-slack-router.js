@@ -1,7 +1,5 @@
 /* eslint-disable no-case-declarations, camelcase */
-
 import express from 'express';
-// import { runBot, stopBot } from '../utils/slack-responder';
 
 export const howardSlackRouter = express.Router();
 
@@ -69,9 +67,6 @@ howardSlackRouter.post('/', async (req, res) => {
       const num = +text.slice(0, -1);
       req.app.locals.mouthiness = num;
       req.app.locals.stopBot();
-
-      console.log('logging inside percent-changer: ', num, req.app.locals.mouthiness);
-
       return setTimeout(() => {
         req.app.locals.runBot(num);
         res.send(`Howard's mouthiness adjusted to ${req.app.locals.mouthiness}%`);
