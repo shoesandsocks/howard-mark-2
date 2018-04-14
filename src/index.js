@@ -12,7 +12,7 @@ require('dotenv').config();
 const port = process.env.PORT;
 const app = express();
 
-app.locals.responderOn = true;
+app.locals.responderOn = false;
 app.locals.mouthiness = 21;
 app.locals.hushed = false;
 

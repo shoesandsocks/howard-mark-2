@@ -11,6 +11,10 @@ const bot = new SlackBot({
   name: 'Howard Chicken',
 });
 
+const botParams = {
+  icon_emoji: ':chicken:',
+};
+
 const handleColons = (term, channel) => {
   if (term.match(/:$/)) {
     setTimeout(() => search(term, channel), 3000);
@@ -19,8 +23,8 @@ const handleColons = (term, channel) => {
 
 const search = (text, channel) =>
   howard('searchQuotes', text).then((reply) => {
-    handleColons(reply, channel);
-    return bot.postMessage(channel, reply, {}); // TODO: at least dress up parameters here
+    handleColons(reply.text, channel);
+    return bot.postMessage(channel, reply.text, botParams);
   });
 
 /**
