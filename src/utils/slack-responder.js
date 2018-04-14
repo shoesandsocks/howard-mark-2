@@ -65,6 +65,7 @@ export const stopBot = () => {
 export const runBot = (mouthiness) => {
   bot.on('start', () => console.log('Server started; linked to slack'));
   bot.on('message', async (data) => {
+    console.log(data, mouthiness);
     const { text, channel } = data;
     if (
       data.type !== 'message' ||
