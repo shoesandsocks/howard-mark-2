@@ -57,12 +57,12 @@ const isAuthed = (req, res, next) => {
 /*
 * test middleware
 */
-app.use('*', (req, res, next) => {
-  console.log('====================================');
-  console.log(req.body);
-  console.log('====================================');
-  next();
-});
+// app.use('*', (req, res, next) => {
+//   console.log('====================================');
+//   console.log(req.body);
+//   console.log('====================================');
+//   next();
+// });
 
 /* requests to /howard go through routes/howardRouter */
 app.use('/howard', howardRouter);
