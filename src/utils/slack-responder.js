@@ -23,6 +23,7 @@ const handleColons = (term, channel) => {
 
 const search = (text, channel) =>
   howard('searchQuotes', text).then((reply) => {
+    console.log(reply);
     handleColons(reply.text, channel);
     return bot.postMessage(channel, reply.text, botParams);
   });
@@ -50,7 +51,7 @@ export const runBot = (db, mouthiness) => {
     if (data.channel === 'C61L2R7N2') {
       // #debug
       return howard('getMarkov', data.text).then(markov =>
-        bot.postMessage(data.channel, markov, {}));
+        bot.postMessage(data.channel, markov.text, botParams));
     }
     if (data.channel === 'C3ZHJ4K9Q') {
       // #testing ->
@@ -58,7 +59,8 @@ export const runBot = (db, mouthiness) => {
     if (data.text.indexOf('howard') > -1 || data.text.indexOf('Howard') > -1) {
       if (data.text.match(/\?$/)) {
         // hHoward and a Qmark -> 100%
-        return search(data.text, data.channel);
+        return howard('searchQuotes', data.text).then(reply =>
+          bot.postMessage(data.channel, reply.text, botParams));
       }
       if (coinflip(80)) {
         // hHoward, but not Qmark -> 80%
