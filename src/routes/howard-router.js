@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-
 import express from 'express';
 
 import { howard } from '../utils/howard';

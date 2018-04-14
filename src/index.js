@@ -1,13 +1,20 @@
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
 import { howardRouter } from './routes/howard-router';
+import { howardSlackRouter } from './routes/howard-slack-router';
+// import { howardController } from './routes/howard-controller';
 
 require('dotenv').config();
 
 const port = process.env.PORT;
 const app = express();
+
+app.locals.responderOn = true;
+app.locals.mouthiness = 21;
+app.locals.hushed = false;
 
 /*
 * BEGIN SETUP
@@ -16,20 +23,50 @@ const app = express();
 /* basic cors usage to allow other domains to hit /howard. TODO: maybe revisit this */
 app.use(cors());
 
-/* urlencoded to read POST data coming in */
-app.use(express.urlencoded({ extended: true }));
+/* to read POST data coming in */
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 /* force HTTPS
 *  docs say: "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
 // a load balancer (e.g. Heroku)."" */
 app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
+/**
+ * AUTHORIZATION MIDDLEWARE (must be?) before routes
+ */
+const isAuthed = (req, res, next) => {
+  const token = req.header('token');
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (decoded && !err) {
+        return next();
+      }
+      return res.json({ error: err.message });
+    });
+  } else {
+    return res.json({ error: 'no token' });
+  }
+  return false;
+};
+
 /*
 * BEGIN ROUTES
 */
 
+/*
+* test middleware
+*/
+app.use('*', (req, res, next) => {
+  console.log('====================================');
+  console.log(req.body);
+  console.log('====================================');
+  next();
+});
+
 /* requests to /howard go through routes/howardRouter */
 app.use('/howard', howardRouter);
+app.use('/howardslack', howardSlackRouter);
 
 /* this pair acts as catch-all: sends all else to build/index.html (front-end, built elsewhere) */
 app.use(express.static(path.join(__dirname, '../client/build')));
@@ -39,4 +76,4 @@ app.get('/*', (req, res) => {
 });
 
 /* start server */
-app.listen(port, () => `On ${port}`);
+app.listen(port, () => console.log(`On ${port}`)); // eslint-disable-line
