@@ -21,12 +21,39 @@ const handleColons = (term, channel) => {
   }
 };
 
-const search = (text, channel) =>
-  howard('searchQuotes', text).then((reply) => {
-    console.log(reply);
-    handleColons(reply.text, channel);
-    return bot.postMessage(channel, reply.text, botParams);
-  });
+const randomQuote = channel =>
+  howard('getQuotes', 1)
+    .then((reply) => {
+      const quote = reply[0].text; // array of 1
+      return bot.postMessage(channel, quote, botParams);
+    })
+    .catch((e) => {
+      console.log('randomQuote fn broke: ', e);
+      return bot.postMessage(channel, 'Howard is offline or something.', botParams);
+    });
+
+const search = (textToSearch, channel) =>
+  howard('searchQuotes', textToSearch)
+    .then(async (reply) => {
+      let text;
+      try {
+        if (Array.isArray(reply) && reply.length > 0) {
+          const rnd = Math.floor(Math.random() * reply.length);
+          text = reply[rnd].text; // eslint-disable-line
+        } else if (Array.isArray(reply) && reply.length === 0) {
+          return randomQuote(channel);
+        }
+      } catch (er) {
+        console.log('processing went wrong, this is from the try-catch', er);
+        return randomQuote(channel);
+      }
+      handleColons(text, channel);
+      return bot.postMessage(channel, text, botParams);
+    })
+    .catch((e) => {
+      console.log('entire search went wrong, this is from the then-catch', e);
+      return randomQuote(channel);
+ });
 
 /**
  * START AND STOP FUNCTIONS TO EXPORT FROM MODULE
@@ -38,39 +65,39 @@ export const stopBot = () => {
 export const runBot = (db, mouthiness) => {
   bot.on('start', () => console.log('Server started; linked to slack'));
   bot.on('message', async (data) => {
+    const { text, channel } = data;
     if (
       data.type !== 'message' ||
       !data.type ||
       data.bot_id ||
-      !data.text ||
+      !text ||
       data.subtype === 'file_share' ||
       data.text.split(' ')[0].indexOf('/') > -1
     ) {
       return null;
     }
-    if (data.channel === 'C61L2R7N2') {
+    if (channel === 'C61L2R7N2') {
       // #debug
-      return howard('getMarkov', data.text).then(markov =>
-        bot.postMessage(data.channel, markov.text, botParams));
+      return howard('getMarkov', text).then(markov =>
+        bot.postMessage(channel, markov.text, botParams));
     }
-    if (data.channel === 'C3ZHJ4K9Q') {
+    if (channel === 'C3ZHJ4K9Q') {
       // #testing ->
     }
-    if (data.text.indexOf('howard') > -1 || data.text.indexOf('Howard') > -1) {
-      if (data.text.match(/\?$/)) {
+    if (text.indexOf('howard') > -1 || text.indexOf('Howard') > -1) {
+      if (text.match(/\?$/)) {
         // hHoward and a Qmark -> 100%
-        return howard('searchQuotes', data.text).then(reply =>
-          bot.postMessage(data.channel, reply.text, botParams));
+        return search(text, channel);
       }
       if (coinflip(80)) {
         // hHoward, but not Qmark -> 80%
-        return search(data.text, data.channel);
+        return search(text, channel);
       }
       return null;
     }
     if (coinflip(mouthiness)) {
       // all other -> go by the server mouthiness setting
-      return search(data.text, data.channel);
+      return search(text, channel);
     }
     return null;
   });
