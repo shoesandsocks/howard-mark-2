@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
+
+import { runBot, stopBot } from './utils/slack-responder';
 // import { howardController } from './routes/howard-controller';
 
 require('dotenv').config();
@@ -12,13 +14,17 @@ require('dotenv').config();
 const port = process.env.PORT;
 const app = express();
 
-app.locals.responderOn = false;
-app.locals.mouthiness = 21;
-app.locals.hushed = false;
-
 /*
 * BEGIN SETUP
 */
+// Bot setup
+
+app.locals.responderOn = true;
+app.locals.mouthiness = 21;
+app.locals.hushed = false;
+app.locals.runBot = runBot;
+app.locals.stopBot = stopBot;
+app.locals.runBot(app.locals.mouthiness);
 
 /* basic cors usage to allow other domains to hit /howard. TODO: maybe revisit this */
 app.use(cors());

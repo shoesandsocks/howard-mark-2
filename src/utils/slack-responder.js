@@ -53,7 +53,7 @@ const search = (textToSearch, channel) =>
     .catch((e) => {
       console.log('entire search went wrong, this is from the then-catch', e);
       return randomQuote(channel);
- });
+    });
 
 /**
  * START AND STOP FUNCTIONS TO EXPORT FROM MODULE
@@ -62,7 +62,7 @@ export const stopBot = () => {
   bot.removeAllListeners();
 };
 
-export const runBot = (db, mouthiness) => {
+export const runBot = (mouthiness) => {
   bot.on('start', () => console.log('Server started; linked to slack'));
   bot.on('message', async (data) => {
     const { text, channel } = data;
