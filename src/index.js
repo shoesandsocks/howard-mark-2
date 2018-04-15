@@ -44,7 +44,7 @@ app.use(express.json());
 *  N.B.: docs say, "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
 *        a load balancer (e.g. Heroku).""
 */
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 /**
  * AUTHORIZATION MIDDLEWARE
