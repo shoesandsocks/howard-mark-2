@@ -1,4 +1,5 @@
 import SlackBot from 'slackbots';
+import winston from 'winston';
 
 import { howard } from './howard';
 import { coinflip } from './coinflip';
@@ -15,11 +16,11 @@ const botParams = {
   icon_emoji: ':chicken:',
 };
 
-const handleColons = (term, channel) => {
-  if (term.match(/:$/)) {
-    setTimeout(() => search(term, channel), 3000);
-  }
-};
+// const handleColons = (term, channel) => {
+//   if (term.match(/:$/)) {
+//     setTimeout(() => search(term, channel), 3000); // this line throws hoisting error
+//   }
+// };
 
 const randomQuote = channel =>
   howard('getQuotes', 1)
@@ -28,7 +29,7 @@ const randomQuote = channel =>
       return bot.postMessage(channel, quote, botParams);
     })
     .catch((e) => {
-      console.log('randomQuote fn broke: ', e);
+      winston.error('randomQuote fn broke: ', e);
       return bot.postMessage(channel, 'Howard is offline or something.', botParams);
     });
 
@@ -44,14 +45,18 @@ const search = (textToSearch, channel) =>
           return randomQuote(channel);
         }
       } catch (er) {
-        console.log('processing went wrong, this is from the try-catch', er);
+        winston.error('processing went wrong, this is from the try-catch', er);
         return randomQuote(channel);
       }
-      handleColons(text, channel);
+      // re: hoisting error above: fn only used once, so just do it inline
+      if (text.match(/:$/)) {
+        setTimeout(() => search(text, channel), 3000);
+      }
+      // handleColons(text, channel);
       return bot.postMessage(channel, text, botParams);
     })
     .catch((e) => {
-      console.log('entire search went wrong, this is from the then-catch', e);
+      winston.error('entire search went wrong, this is from the then-catch', e);
       return randomQuote(channel);
     });
 
@@ -63,7 +68,7 @@ export const stopBot = () => {
 };
 
 export const runBot = (mouthiness) => {
-  bot.on('start', () => console.log('Server started; linked to slack'));
+  bot.on('start', () => winston.info('Server started; linked to slack'));
   bot.on('message', async (data) => {
     const { text, channel } = data;
     if (

@@ -20,7 +20,8 @@
     "express-sslify": "^1.2.0",
     "jsonwebtoken": "^8.2.1",
     "mongodb": "^3.0.4",
-    "slackbots": "^1.1.0"
+    "slackbots": "^1.1.0",
+    "winston": "^2.4.1"
   },
   "devDependencies": {
     "eslint": "^4.18.2",

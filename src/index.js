@@ -4,6 +4,8 @@ import cors from 'cors';
 import compression from 'compression';
 import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
+import winston from 'winston';
+
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
 
@@ -18,8 +20,8 @@ const app = express();
 /*
 * BEGIN SETUP
 */
-// Bot setup
 
+// Bot variables and functions, on 'locals' object
 app.locals.responderOn = true;
 app.locals.mouthiness = 21;
 app.locals.hushed = false;
@@ -30,20 +32,22 @@ app.locals.runBot(app.locals.mouthiness);
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
 
-/* basic cors usage to allow other domains to hit /howard. TODO: maybe revisit this */
+/* basic cors usage to allow other domains to hit routes. TODO: maybe revisit this */
 app.use(cors());
 
-/* to read POST data coming in */
+/* to read the `.body` on POST data coming in, not sure if need both, but... */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-/* force HTTPS
-*  docs say: "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
-// a load balancer (e.g. Heroku)."" */
+/*
+*  Force HTTPS
+*  N.B.: docs say, "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
+*        a load balancer (e.g. Heroku).""
+*/
 app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 /**
- * AUTHORIZATION MIDDLEWARE (must be?) before routes
+ * AUTHORIZATION MIDDLEWARE
  */
 const isAuthed = (req, res, next) => {
   const token = req.header('token');
@@ -74,11 +78,14 @@ const isAuthed = (req, res, next) => {
 //   next();
 // });
 
-/* requests to /howard go through routes/howardRouter */
+/*
+*  /howard route handles the "data API," requesting quotes or eps from the db
+*  /howardslack routes handle slash-commands from the Howard slackbot (`/howard status`, et al.)
+*/
 app.use('/howard', howardRouter);
 app.use('/howardslack', howardSlackRouter);
 
-/* this pair acts as catch-all: sends all else to build/index.html (front-end, built elsewhere) */
+/* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('/*', (req, res) => {
@@ -86,4 +93,4 @@ app.get('/*', (req, res) => {
 });
 
 /* start server */
-app.listen(port, () => console.log(`On ${port}`)); // eslint-disable-line
+app.listen(port, () => winston.info(`On ${port}`));
