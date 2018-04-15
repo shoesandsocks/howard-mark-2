@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
+import compression from 'compression';
 import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
 import { howardRouter } from './routes/howard-router';
@@ -25,6 +26,9 @@ app.locals.hushed = false;
 app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
 app.locals.runBot(app.locals.mouthiness);
+
+/* gzip text, i guess? this is new to me, this project */
+app.use(compression());
 
 /* basic cors usage to allow other domains to hit /howard. TODO: maybe revisit this */
 app.use(cors());

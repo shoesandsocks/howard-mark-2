@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "backpack-core": "^0.5.0",
+    "compression": "^1.7.2",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
