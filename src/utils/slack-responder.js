@@ -13,7 +13,8 @@ const bot = new SlackBot({
 });
 
 const botParams = {
-  icon_emoji: ':chicken:',
+  icon_emoji: ':howard:',
+  // icon_emoji: ':chicken:',
 };
 
 // const handleColons = (term, channel) => {
