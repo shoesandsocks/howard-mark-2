@@ -5,6 +5,7 @@ import compression from 'compression';
 import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
 import winston from 'winston';
+import axios from 'axios';
 
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
@@ -22,7 +23,7 @@ const app = express();
 */
 
 // Bot variables and functions, on 'locals' object
-app.locals.responderOn = true;
+app.locals.responderOn = false;
 app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
@@ -86,12 +87,44 @@ const isAuthed = (req, res, next) => {
 app.use('/howard', howardRouter);
 app.use('/howardslack', howardSlackRouter);
 
+// oauth endpoint for slack login handshake
+app.get('/oauth', (req, res) => {
+  const { code } = req.query;
+  const sec = process.env.CLIENT_SECRET;
+  const oauthURL = `https://slack.com/api/oauth.access?client_id=11083475395.188120798310&client_secret=${sec}&code=${code}`;
+
+  axios
+    .get(oauthURL)
+    .then((response) => {
+      console.log(response.data);
+      if (response.data.ok) {
+        const { user } = response.data;
+        const { id, name, image_192 } = user; // eslint-disable-line
+        // db.collection('webusers').updateOne(
+        //   { tumblr_id: id },
+        //   {
+        //     $set: { name, avatar: image_192 },
+        //     $push: { lastLogin: { $each: [new Date()], $slice: -10 } },
+        //     $setOnInsert: { createdAt: new Date() },
+        //   },
+        //   { upsert: true },
+        // );
+        const token = jwt.sign({ name, avi: image_192 }, process.env.JWT_SECRET, {
+          expiresIn: '1h',
+        });
+        return res.redirect(`login/?token=${token}`);
+      }
+      return res.send({ error: 'error getting response from Slack.' });
+    })
+    .catch((error) => {
+      winston.error(error);
+      return res.send({ error });
+    });
+});
+
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use(express.static(path.join(__dirname, '../client/build')));
-
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+app.get('*', (req, res) => res.redirect('/'));
 
 /* start server */
 app.listen(port, () => winston.info(`On ${port}`));
