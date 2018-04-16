@@ -124,7 +124,7 @@ app.get('/oauth', (req, res) => {
 
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use(express.static(path.join(__dirname, '../client/build')));
-app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../client/build', 'index.html')));
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'client/build', 'index.html')));
 
 /* start server */
 app.listen(port, () => winston.info(`On ${port}`));
