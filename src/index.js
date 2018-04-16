@@ -51,20 +51,20 @@ if (process.env.NODE_ENV === 'production') {
 /**
  * AUTHORIZATION MIDDLEWARE
  */
-const isAuthed = (req, res, next) => {
-  const token = req.header('token');
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (decoded && !err) {
-        return next();
-      }
-      return res.json({ error: err.message });
-    });
-  } else {
-    return res.json({ error: 'no token' });
-  }
-  return false;
-};
+// const isAuthed = (req, res, next) => {
+//   const token = req.header('token');
+//   if (token) {
+//     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//       if (decoded && !err) {
+//         return next();
+//       }
+//       return res.json({ error: err.message });
+//     });
+//   } else {
+//     return res.json({ error: 'no token' });
+//   }
+//   return false;
+// };
 
 /*
 * BEGIN ROUTES
@@ -125,7 +125,7 @@ app.get('/oauth', (req, res) => {
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.get('/*', (req, res) =>
-  res.sendFile('index.html', { root: path.join(__dirname, '../client/public') }));
+  res.sendFile('index.html', { root: path.join(__dirname, '../client/build') }));
 
 /* start server */
 app.listen(port, () => winston.info(`On ${port}`));
