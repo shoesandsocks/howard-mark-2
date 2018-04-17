@@ -28,7 +28,7 @@ app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
-app.locals.runBot(app.locals.mouthiness);
+// app.locals.runBot(app.locals.mouthiness);
 
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
@@ -123,9 +123,11 @@ app.get('/oauth', (req, res) => {
 });
 
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
-app.use(express.static(path.join(__dirname, '../client/build')));
-app.get('/*', (req, res) =>
-  res.sendFile('index.html', { root: path.join(__dirname, '../client/build') }));
+app.use('/', express.static(path.join(__dirname, '../client/build')));
+app.get('*', (req, res) => {
+  console.log('star');
+  return res.sendFile('index.html', { root: path.join(__dirname, '../client/build') });
+});
 
 /* start server */
 app.listen(port, () => winston.info(`On ${port}`));
