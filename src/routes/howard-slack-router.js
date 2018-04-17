@@ -44,6 +44,7 @@ howardSlackRouter.post('/', async (req, res) => {
       return res.send(`Howard has started, ${user_name}. His mouthiness is ${req.app.locals.mouthiness}%.`);
     }
     case 'shh': {
+      console.log(req.app.locals.hushed);
       if (!req.app.locals.responderOn) {
         return res.send(`Howard's off. No sense in shushing him, ${user_name}.`);
       }

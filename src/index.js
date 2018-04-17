@@ -55,8 +55,6 @@ const isAuthed = (req, res, next) => {
   const token = req.header('token');
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      console.log(err, decoded);
-
       if (decoded && !err) {
         return next();
       }
@@ -81,11 +79,12 @@ const isAuthed = (req, res, next) => {
 //   console.log('====================================');
 //   next();
 // });
+
 /*
-*
+* Get settings to display on website. requires token authentication
+* not worth breaking this one out to its own file (yet)
 */
 app.get('/howardsettings', isAuthed, (req, res) => {
-  console.log('howard settings route hit');
   res.send({
     status: app.locals.responderOn,
     mouthiness: app.locals.mouthiness,
