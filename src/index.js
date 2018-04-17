@@ -88,7 +88,7 @@ app.get('/howardsettings', isAuthed, (req, res) => {
   res.send({
     status: app.locals.responderOn,
     mouthiness: app.locals.mouthiness,
-    hushed: false,
+    hushed: app.locals.hushed,
   });
 });
 
