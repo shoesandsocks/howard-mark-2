@@ -44,7 +44,7 @@ howardSlackRouter.post('/', async (req, res) => {
       return res.send(`Howard has started, ${user_name}. His mouthiness is ${req.app.locals.mouthiness}%.`);
     }
     case 'shh': {
-      console.log(req.app.locals.hushed);
+      console.log('top', req.app.locals.hushed);
       if (!req.app.locals.responderOn) {
         return res.send(`Howard's off. No sense in shushing him, ${user_name}.`);
       }
@@ -62,6 +62,7 @@ howardSlackRouter.post('/', async (req, res) => {
           req.app.locals.runBot(req.app.locals.mouthiness);
         }
       }, 30 * 60 * 1000); // 30 min in millis
+      console.log('end', req.app.locals.hushed);
       return res.sendStatus(200);
     }
     case /^1?\d{1,2}%$/.test(text) && text: {
