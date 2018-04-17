@@ -28,7 +28,7 @@ app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
-// app.locals.runBot(app.locals.mouthiness);
+app.locals.runBot(app.locals.mouthiness);
 
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
@@ -51,20 +51,20 @@ if (process.env.NODE_ENV === 'production') {
 /**
  * AUTHORIZATION MIDDLEWARE
  */
-// const isAuthed = (req, res, next) => {
-//   const token = req.header('token');
-//   if (token) {
-//     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-//       if (decoded && !err) {
-//         return next();
-//       }
-//       return res.json({ error: err.message });
-//     });
-//   } else {
-//     return res.json({ error: 'no token' });
-//   }
-//   return false;
-// };
+const isAuthed = (req, res, next) => {
+  const token = req.header('token');
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (decoded && !err) {
+        return next();
+      }
+      return res.json({ error: err.message });
+    });
+  } else {
+    return res.json({ error: 'no token' });
+  }
+  return false;
+};
 
 /*
 * BEGIN ROUTES
@@ -79,6 +79,16 @@ if (process.env.NODE_ENV === 'production') {
 //   console.log('====================================');
 //   next();
 // });
+/*
+*
+*/
+app.get('/howardsettings', isAuthed, (req, res) => {
+  res.send({
+    status: app.locals.responderOn,
+    mouthiness: app.locals.mouthiness,
+    hushed: false,
+  });
+});
 
 /*
 *  /howard route handles the "data API," requesting quotes or eps from the db
