@@ -55,6 +55,8 @@ const isAuthed = (req, res, next) => {
   const token = req.header('token');
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      console.log(err, decoded);
+
       if (decoded && !err) {
         return next();
       }
@@ -83,6 +85,7 @@ const isAuthed = (req, res, next) => {
 *
 */
 app.get('/howardsettings', isAuthed, (req, res) => {
+  console.log('howard settings route hit');
   res.send({
     status: app.locals.responderOn,
     mouthiness: app.locals.mouthiness,
