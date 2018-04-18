@@ -3,7 +3,7 @@ export const triadMaker = (array) => {
   array.forEach((quote) => {
     const split = quote.split(' ');
     while (split.length >= 3) {
-      triads.push(`${split[0]} ${split[1]} ${split[2]}`);
+      triads.push(`${split[0].toLowerCase()} ${split[1].toLowerCase()} ${split[2].toLowerCase()}`);
       split.shift();
     }
   });
