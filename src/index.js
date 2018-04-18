@@ -9,11 +9,11 @@ import axios from 'axios';
 
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
+import { cronRouter } from './routes/cron-router';
 
-import { runJobs } from './utils/crons';
+import { runJobs } from './utils/cron-management';
 import { runBot, stopBot } from './utils/slack-responder';
 import { userLogging } from './utils/db-user-logging';
-// import { howardController } from './routes/howard-controller';
 
 require('dotenv').config();
 
@@ -23,14 +23,15 @@ const app = express();
 /*
 * BEGIN SETUP
 */
-// runJobs();
+runJobs();
+
 // Bot variables and functions, on 'locals' object
 app.locals.responderOn = false;
 app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
-app.locals.runBot(app.locals.mouthiness);
+// app.locals.runBot(app.locals.mouthiness);
 
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
@@ -82,10 +83,7 @@ const isAuthed = (req, res, next) => {
 //   next();
 // });
 
-/*
-* Get settings to display on website. requires token authentication
-* not worth breaking this one out to its own file (yet)
-*/
+// this one's not worth splitting out to its own route file
 app.get('/howardsettings', isAuthed, (req, res) => {
   res.send({
     status: app.locals.responderOn,
@@ -93,13 +91,15 @@ app.get('/howardsettings', isAuthed, (req, res) => {
     hushed: app.locals.hushed,
   });
 });
-
 /*
 *  /howard route handles the "data API," requesting quotes or eps from the db
 *  /howardslack routes handle slash-commands from the Howard slackbot (`/howard status`, et al.)
+*  /howardcron manages scheduling for logged-in users
 */
 app.use('/howard', howardRouter);
 app.use('/howardslack', howardSlackRouter);
+// app.use('/howardcron', isAuthed, cronRouter);
+app.use('/howardcron', cronRouter); // TODO: remove unauth when done
 
 // oauth endpoint for slack login handshake
 app.get('/oauth', (req, res) => {
