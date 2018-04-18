@@ -1,28 +1,14 @@
-// import SlackBot from 'slackbots';
 import winston from 'winston';
-// TODO: testing import of bot instead
+
 import { bot } from './slackbot-instance';
 import { howard } from './howard';
 import { coinflip } from './coinflip';
 
-// set up bot
 require('dotenv').config();
-
-// const bot = new SlackBot({
-//   token: process.env.BOT_TOKEN,
-//   name: 'Howard Chicken',
-// });
 
 const botParams = {
   icon_emoji: ':howard:',
-  // icon_emoji: ':chicken:',
 };
-
-// const handleColons = (term, channel) => {
-//   if (term.match(/:$/)) {
-//     setTimeout(() => search(term, channel), 3000); // this line throws hoisting error
-//   }
-// };
 
 const randomQuote = channel =>
   howard('getQuotes', 1)
@@ -50,11 +36,10 @@ const search = (textToSearch, channel) =>
         winston.error('processing went wrong, this is from the try-catch', er);
         return randomQuote(channel);
       }
-      // re: hoisting error above: fn only used once, so just do it inline
+      // original 'handleColons' fn; a small edge case
       if (text.match(/:$/)) {
         setTimeout(() => search(text, channel), 3000);
       }
-      // handleColons(text, channel);
       return bot.postMessage(channel, text, botParams);
     })
     .catch((e) => {

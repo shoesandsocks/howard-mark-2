@@ -1,5 +1,4 @@
 import MongoClient from 'mongodb';
-
 import { markov } from './markov';
 import { triadMaker } from './triadMaker';
 

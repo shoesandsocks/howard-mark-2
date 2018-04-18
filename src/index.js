@@ -10,7 +10,9 @@ import axios from 'axios';
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
 
+import { runJobs } from './utils/crons';
 import { runBot, stopBot } from './utils/slack-responder';
+import { userLogging } from './utils/db-user-logging';
 // import { howardController } from './routes/howard-controller';
 
 require('dotenv').config();
@@ -21,7 +23,7 @@ const app = express();
 /*
 * BEGIN SETUP
 */
-
+// runJobs();
 // Bot variables and functions, on 'locals' object
 app.locals.responderOn = false;
 app.locals.mouthiness = 21;
@@ -110,20 +112,13 @@ app.get('/oauth', (req, res) => {
     .then((response) => {
       // console.log(response.data);
       if (response.data.ok) {
-        const { user } = response.data;
-        const { id, name, image_192 } = user; // eslint-disable-line
-        // db.collection('webusers').updateOne(
-        //   { tumblr_id: id },
-        //   {
-        //     $set: { name, avatar: image_192 },
-        //     $push: { lastLogin: { $each: [new Date()], $slice: -10 } },
-        //     $setOnInsert: { createdAt: new Date() },
-        //   },
-        //   { upsert: true },
-        // );
+        const {
+          user: { id, name, image_192 }, // eslint-disable-line
+        } = response.data;
         const token = jwt.sign({ name, avi: image_192 }, process.env.JWT_SECRET, {
-          expiresIn: '1h',
+          expiresIn: '4h',
         });
+        userLogging(id, name, image_192);
         return res.redirect(`login/?token=${token}`);
       }
       return res.send({ error: 'error getting response from Slack.' });
