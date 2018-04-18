@@ -1,16 +1,17 @@
-import SlackBot from 'slackbots';
+// import SlackBot from 'slackbots';
 import winston from 'winston';
-
+// TODO: testing import of bot instead
+import { bot } from './slackbot-instance';
 import { howard } from './howard';
 import { coinflip } from './coinflip';
 
 // set up bot
 require('dotenv').config();
 
-const bot = new SlackBot({
-  token: process.env.BOT_TOKEN,
-  name: 'Howard Chicken',
-});
+// const bot = new SlackBot({
+//   token: process.env.BOT_TOKEN,
+//   name: 'Howard Chicken',
+// });
 
 const botParams = {
   icon_emoji: ':howard:',
