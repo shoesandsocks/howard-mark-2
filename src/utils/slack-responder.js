@@ -79,11 +79,11 @@ export const runBot = (mouthiness) => {
     if (text.indexOf('howard') > -1 || text.indexOf('Howard') > -1) {
       if (text.match(/\?$/)) {
         // hHoward and a Qmark -> 100%
-        return search(text, channel);
+        return randomQuote(channel); // rnd, not custom. else it'll always throw "Howard Hughes" Q
       }
       if (coinflip(80)) {
         // hHoward, but not Qmark -> 80%
-        return search(text, channel);
+        return randomQuote(channel); // rnd, not custom. else it'll always throw "Howard Hughes" Q
       }
       return null;
     }
