@@ -31,7 +31,7 @@ export const getOneUsersJobs = async (tumblr_id) => {
       .toArray();
     client.close();
     oneUsersJobs[0].activeCronJobs.forEach((j) => {
-      j.jobName = j.jobName.substring(8); // remove mashed-on user id before sending to client
+      j.jobName = j.jobName.substring(9); // remove mashed-on user id before sending to client
     });
     return oneUsersJobs;
   } catch (e) {
