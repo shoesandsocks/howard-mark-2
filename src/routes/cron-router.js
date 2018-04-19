@@ -6,7 +6,7 @@ import { channelLoader } from '../utils/channel-loader';
 
 export const cronRouter = express.Router();
 
-const channels = channelLoader();
+const channels = channelLoader;
 
 const latest = async (tumblr_id, res) => {
   const usersJobs = await getOneUsersJobs(tumblr_id);
