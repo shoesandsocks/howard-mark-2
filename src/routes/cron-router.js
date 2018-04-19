@@ -24,6 +24,7 @@ cronRouter.post('/add', async (req, res) => {
 });
 
 cronRouter.post('/kill', async (req, res) => {
+  console.log(req.body.tumblr_id, req.body.jobName);
   try {
     await killJob(req.body.tumblr_id, req.body.jobName);
   } catch (e) {

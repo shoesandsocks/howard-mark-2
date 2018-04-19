@@ -26,7 +26,7 @@ export const runJobs = async () => {
 };
 
 export const killJob = async (tumblr_id, jobName) => {
-  console.log(tumblr_id, jobName);
+  console.log('killJob about to use node-schedule: ', tumblr_id, jobName);
   const uniqueName = tumblr_id + jobName;
   schedule.scheduledJobs[uniqueName].cancel();
   return deleteJob(tumblr_id, jobName);
