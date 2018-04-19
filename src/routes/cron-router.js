@@ -10,11 +10,7 @@ const latest = async (tumblr_id, res) => {
   return res.send({ usersJobs });
 };
 
-cronRouter.post('/', async (req, res) => {
-  console.log(req.body);
-
-  latest(req.body.tumblr_id, res);
-});
+cronRouter.post('/', async (req, res) => latest(req.body.tumblr_id, res));
 
 cronRouter.post('/add', async (req, res) => {
   await addJob(req.body.tumblr_id, req.body.newJob);
@@ -22,7 +18,6 @@ cronRouter.post('/add', async (req, res) => {
 });
 
 cronRouter.post('/kill', async (req, res) => {
-  console.log(req.body);
   await killJob(req.body.tumblr_id, req.body.jobName);
   return latest(req.body.tumblr_id, res);
 });
