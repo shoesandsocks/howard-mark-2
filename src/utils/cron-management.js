@@ -35,7 +35,9 @@ export const killJob = async (tumblr_id, jobName) => {
 };
 
 export const addJob = async (tumblr_id, newJob) => {
-  scheduleJob(newJob);
+  const uniqueName = tumblr_id + newJob.jobName;
+  scheduleJob(uniqueName);
+  console.log('addJob: ', tumblr_id, uniqueName);
   return saveJob(tumblr_id, newJob);
 };
 
