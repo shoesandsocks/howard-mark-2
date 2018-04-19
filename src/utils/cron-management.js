@@ -41,7 +41,7 @@ export const addJob = async (tumblr_id, newJob) => {
   console.log('addJob: ', JSON.stringify(withUniqueName));
 
   scheduleJob(withUniqueName);
-  return saveJob(tumblr_id, newJob);
+  return saveJob(tumblr_id, withUniqueName);
 };
 
 // TODO: BONUS: figure out what to do with tumblr_id. howard quotes
