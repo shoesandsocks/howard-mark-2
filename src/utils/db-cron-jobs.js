@@ -43,12 +43,11 @@ export const getOneUsersJobs = async (tumblr_id) => {
 export const saveJob = async (tumblr_id, newJob) => {
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
-  const uniqueName = tumblr_id + newJob.jobName;
-  const jobObject = Object.assign({}, newJob, { jobName: uniqueName });
+
   try {
     const updatedJobs = await db.collection('webusers').findOneAndUpdate(
       { tumblr_id },
-      { $addToSet: { activeCronJobs: jobObject } },
+      { $addToSet: { activeCronJobs: newJob } },
       {
         projection: { activeCronJobs: 1, _id: 0 },
         returnNewDocument: true,

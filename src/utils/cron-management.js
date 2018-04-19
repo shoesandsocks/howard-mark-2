@@ -36,8 +36,11 @@ export const killJob = async (tumblr_id, jobName) => {
 
 export const addJob = async (tumblr_id, newJob) => {
   const uniqueName = tumblr_id + newJob.jobName;
-  scheduleJob(uniqueName);
-  console.log('addJob: ', tumblr_id, uniqueName);
+  const withUniqueName = Object.assign({}, newJob, { jobName: uniqueName });
+
+  console.log('addJob: ', JSON.stringify(withUniqueName));
+
+  scheduleJob(withUniqueName);
   return saveJob(tumblr_id, newJob);
 };
 
