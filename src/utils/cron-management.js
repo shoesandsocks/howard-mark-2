@@ -20,9 +20,9 @@ const scheduleJob = job =>
 export const runJobs = async () => {
   const jobs = await getJobs();
   jobs.forEach(obj => obj.activeCronJobs.forEach(job => scheduleJob(job)));
-  setTimeout(() => {
-    console.log(schedule.scheduledJobs);
-  }, 10000);
+  // setTimeout(() => {
+  //   console.log(schedule.scheduledJobs);
+  // }, 10000);
 };
 
 export const killJob = async (tumblr_id, jobName) => {
@@ -36,7 +36,5 @@ export const addJob = async (tumblr_id, newJob) => {
   return saveJob(tumblr_id, newJob);
 };
 
-// TODO: wire all cron fns to web interface
-
-// BONUS: figure out what to do with tumblr_id. howard quotes
+// TODO: BONUS: figure out what to do with tumblr_id. howard quotes
 // to DM channels, maybe?
