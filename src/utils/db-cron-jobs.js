@@ -30,6 +30,9 @@ export const getOneUsersJobs = async (tumblr_id) => {
       .project({ activeCronJobs: 1, _id: 0 })
       .toArray();
     client.close();
+    oneUsersJobs[0].activeCronJobs.forEach((j) => {
+      j.jobName = j.jobName.substring(8); // remove mashed-on user id before sending to client
+    });
     return oneUsersJobs;
   } catch (e) {
     client.close();
