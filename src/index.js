@@ -115,7 +115,7 @@ app.get('/oauth', (req, res) => {
         const {
           user: { id, name, image_192 }, // eslint-disable-line
         } = response.data;
-        const token = jwt.sign({ name, avi: image_192 }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ name, avi: image_192, tumblr_id: id }, process.env.JWT_SECRET, {
           expiresIn: '4h',
         });
         userLogging(id, name, image_192);
