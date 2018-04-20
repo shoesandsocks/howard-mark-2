@@ -13,8 +13,8 @@ const latest = async (tumblr_id) => {
 };
 
 cronRouter.post('/', async (req, res) => {
-  const updatedJobs = await latest(req.body.tumblr_id);
-  return res.send({ updatedJobs, message: 'hello.' });
+  const jobsAndChannels = await latest(req.body.tumblr_id);
+  return res.send({ jobsAndChannels, message: 'hello.' });
 });
 
 cronRouter.post('/add', async (req, res) => {
@@ -25,8 +25,8 @@ cronRouter.post('/add', async (req, res) => {
   } catch (e) {
     message = JSON.stringify(e);
   }
-  const updatedJobs = await latest(tumblr_id);
-  return res.send({ updatedJobs, message });
+  const jobsAndChannels = await latest(tumblr_id);
+  return res.send({ jobsAndChannels, message });
 });
 
 cronRouter.post('/kill', async (req, res) => {
@@ -37,6 +37,6 @@ cronRouter.post('/kill', async (req, res) => {
   } catch (e) {
     message = JSON.stringify(e);
   }
-  const updatedJobs = await latest(tumblr_id);
-  return res.send({ updatedJobs, message });
+  const jobsAndChannels = await latest(tumblr_id);
+  return res.send({ jobsAndChannels, message });
 });

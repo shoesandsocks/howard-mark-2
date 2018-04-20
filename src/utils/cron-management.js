@@ -36,7 +36,7 @@ const validateArgs = ({ tumblr_id, jobName = '', newJob = {} }) => {
     return { error: 'Malformed jobName' };
   }
   if (keys.length === 3) {
-    if (!(newJob.jobName && newJob.schedule && newJob.channel)) {
+    if (!(newJob.jobName && newJob.cronSked && newJob.channelName)) {
       return { error: 'Malformed newJob object.' };
     }
   }
