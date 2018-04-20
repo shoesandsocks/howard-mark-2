@@ -6,29 +6,37 @@ import { channelLoader } from '../utils/channel-loader';
 
 export const cronRouter = express.Router();
 
-const latest = async (tumblr_id, res) => {
+const latest = async (tumblr_id) => {
   const channels = await channelLoader;
   const usersJobs = await getOneUsersJobs(tumblr_id);
-  return res.send({ usersJobs, channels });
+  return { usersJobs, channels };
 };
 
-cronRouter.post('/', async (req, res) => latest(req.body.tumblr_id, res));
+cronRouter.post('/', async (req, res) => {
+  const updatedJobs = await latest(req.body.tumblr_id);
+  return res.send({ updatedJobs, message: 'hello.' });
+});
 
 cronRouter.post('/add', async (req, res) => {
+  const { tumblr_id, newJob } = req.body;
+  let message;
   try {
-    await addJob(req.body.tumblr_id, req.body.newJob);
+    message = await addJob(tumblr_id, newJob);
   } catch (e) {
-    console.log(e);
+    message = JSON.stringify(e);
   }
-  return latest(req.body.tumblr_id, res);
+  const updatedJobs = await latest(tumblr_id);
+  return res.send({ updatedJobs, message });
 });
 
 cronRouter.post('/kill', async (req, res) => {
-  console.log(req.body.tumblr_id, req.body.jobName);
+  const { tumblr_id, jobName } = req.body;
+  let message;
   try {
-    await killJob(req.body.tumblr_id, req.body.jobName);
+    message = await killJob(tumblr_id, jobName);
   } catch (e) {
-    console.log(e);
+    message = JSON.stringify(e);
   }
-  return latest(req.body.tumblr_id, res);
+  const updatedJobs = await latest(tumblr_id);
+  return res.send({ updatedJobs, message });
 });

@@ -19,7 +19,7 @@ const scheduleJob = job =>
 
 const validateArgs = ({ tumblr_id, jobName = '', newJob = {} }) => {
   const keys = Object.keys(newJob);
-  // console.log(keys, jobName, newJob, tumblr_id);
+  console.log(keys, jobName, newJob, tumblr_id);
   if (!tumblr_id) {
     return { error: 'No tumblr_id' };
   }
