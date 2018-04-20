@@ -7,6 +7,7 @@ export const channelLoader = new Promise((resolve, reject) => {
       const channelMap = response.channels
         .filter(c => !c.is_archived)
         .map(c => ({ id: c.id, name: c.name }));
+      channelMap.unshift({ id: 99999, name: ' - Select One - ' });
       resolve(channelMap);
     })
     .catch((error) => {
