@@ -14,7 +14,7 @@ const latest = async (tumblr_id) => {
 
 cronRouter.post('/', async (req, res) => {
   const jobsAndChannels = await latest(req.body.tumblr_id);
-  return res.send({ jobsAndChannels, message: 'hello.' });
+  return res.send({ jobsAndChannels });
 });
 
 cronRouter.post('/add', async (req, res) => {
