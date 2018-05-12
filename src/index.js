@@ -5,15 +5,14 @@ import compression from 'compression';
 import jwt from 'jsonwebtoken';
 import enforce from 'express-sslify';
 import winston from 'winston';
-import axios from 'axios';
 
 import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
 import { cronRouter } from './routes/cron-router';
+import { authRouter } from './routes/auth-router';
 
 import { runJobs } from './utils/cron-management';
 import { runBot, stopBot } from './utils/slack-responder';
-import { userLogging } from './utils/db-user-logging';
 
 require('dotenv').config();
 
@@ -100,41 +99,15 @@ app.use('/howard', howardRouter);
 app.use('/howardslack', howardSlackRouter);
 // app.use('/howardcron', isAuthed, cronRouter);
 app.use('/howardcron', cronRouter); // TODO: remove unauth when done
-
-// oauth endpoint for slack login handshake
-app.get('/oauth', (req, res) => {
-  const { code } = req.query;
-  const sec = process.env.CLIENT_SECRET;
-  const oauthURL = `https://slack.com/api/oauth.access?client_id=11083475395.188120798310&client_secret=${sec}&code=${code}`;
-
-  axios
-    .get(oauthURL)
-    .then((response) => {
-      // console.log(response.data);
-      if (response.data.ok) {
-        const {
-          user: { id, name, image_192 }, // eslint-disable-line
-        } = response.data;
-        const token = jwt.sign({ name, avi: image_192, tumblr_id: id }, process.env.JWT_SECRET, {
-          expiresIn: '4h',
-        });
-        userLogging(id, name, image_192);
-        return res.redirect(`login/?token=${token}`);
-      }
-      return res.send({ error: 'error getting response from Slack.' });
-    })
-    .catch((error) => {
-      winston.error(error);
-      return res.send({ error });
-    });
-});
+app.use('/oauth', authRouter);
 
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use('/', express.static(path.join(__dirname, '../client/build')));
-app.get('*', (req, res) => {
-  console.log('star');
-  return res.sendFile('index.html', { root: path.join(__dirname, '../client/build') });
-});
+app.get('*', (req, res) =>
+  // console.log('star');
+  res.sendFile('index.html', {
+    root: path.join(__dirname, '../client/build'),
+  }));
 
 /* start server */
 app.listen(port, () => winston.info(`On ${port}`));
