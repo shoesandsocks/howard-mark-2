@@ -20,6 +20,7 @@
     "express": "^4.16.2",
     "express-sslify": "^1.2.0",
     "jsonwebtoken": "^8.2.1",
+    "micropub-express": "^0.7.1",
     "mongodb": "^3.0.4",
     "node-schedule": "^1.3.0",
     "slackbots": "^1.1.0",
