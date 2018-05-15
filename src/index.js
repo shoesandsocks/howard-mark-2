@@ -10,6 +10,7 @@ import { howardRouter } from './routes/howard-router';
 import { howardSlackRouter } from './routes/howard-slack-router';
 import { cronRouter } from './routes/cron-router';
 import { authRouter } from './routes/auth-router';
+import { updateRouter } from './routes/update-router';
 
 import { runJobs } from './utils/cron-management';
 import { runBot, stopBot } from './utils/slack-responder';
@@ -100,6 +101,7 @@ app.use('/howardslack', howardSlackRouter);
 app.use('/howardcron', isAuthed, cronRouter);
 // app.use('/howardcron', cronRouter);
 app.use('/oauth', authRouter);
+app.use('/howardupdate', isAuthed, updateRouter);
 
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use('/', express.static(path.join(__dirname, '../client/build')));
