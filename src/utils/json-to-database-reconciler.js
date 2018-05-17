@@ -18,6 +18,7 @@ const getJSON = url =>
 
 export const coreUpdate = async (db) => {
   const quoteArray = await getJSON('https://mtklr.github.io/howard/js/howard.json');
+  console.log(quoteArray[300]); // just to see if it's working
   const stringedQA = quoteArray.map((q, i) => {
     const toString = q.title ? Object.assign({}, q, { episode: i }) : q;
     return JSON.stringify(toString);
