@@ -18,7 +18,6 @@ const getJSON = url =>
 
 export const coreUpdate = async (db) => {
   const quoteArray = await getJSON('https://mtklr.github.io/howard/js/howard.json');
-  console.log(quoteArray[300]); // just to see if it's working
   const stringedQA = quoteArray.map((q, i) => {
     const toString = q.title ? Object.assign({}, q, { episode: i }) : q;
     return JSON.stringify(toString);
@@ -30,6 +29,8 @@ export const coreUpdate = async (db) => {
     .toArray();
 
   const stringedEntireDb = entireDb.map(q => JSON.stringify(q.original));
+
+  console.log(entireDb, stringedEntireDb);
 
   const newQuotes = quoteArray
     .map((q, i) => {
@@ -62,6 +63,5 @@ export const coreUpdate = async (db) => {
     console.log(`query is: ${JSON.stringify(query)}`); // eslint-disable-line
     db.collection('howard').updateOne(query, { $set: { deprecated: true } });
   });
-  console.log(newQuotes, depQuotes); // eslint-disable-line
   return { newQuotes, depQuotes };
 };
