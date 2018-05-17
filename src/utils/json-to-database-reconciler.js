@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 const getJSON = url =>
   new Promise(
     (resolve) => {
