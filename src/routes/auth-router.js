@@ -28,7 +28,7 @@ authRouter.get('/', (req, res) => {
           },
         );
         userLogging(id, name, image_192);
-        return res.redirect(`login/?token=${token}`);
+        return res.redirect(`/?token=${token}`);
       }
       return res.send({ error: 'error getting response from Slack.' });
     })
