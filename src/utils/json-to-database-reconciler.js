@@ -8,8 +8,8 @@ const getJSON = url =>
           response
             .json()
             .then(json => resolve(json.data))
-            .catch(() => console.log('json err'.red)))
-        .catch(() => console.log('fetch error'.red));
+            .catch(() => console.log('json err'.red))) // eslint-disable-line
+        .catch(() => console.log('fetch error'.red)); // eslint-disable-line
     },
     (reject) => {
       reject({ text: 'it barfed.' });
@@ -58,9 +58,9 @@ export const coreUpdate = async (db) => {
     const itsValue = q[someKey];
     const dotKey = `original.${someKey}`;
     const query = { [dotKey]: itsValue };
-    console.log(`query is: ${query}`);
+    console.log(`query is: ${JSON.stringify(query)}`); // eslint-disable-line
     db.collection('howard').updateOne(query, { $set: { deprecated: true } });
   });
-
+  console.log(newQuotes, depQuotes); // eslint-disable-line
   return { newQuotes, depQuotes };
 };
