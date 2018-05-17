@@ -11,6 +11,8 @@ export const updateRouter = express.Router();
 updateRouter.get('/', async (req, res) => {
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
-  console.log(db.collection('howard').find());
-  coreUpdate(db).then(r => res.send(r));
+  coreUpdate(db).then((r) => {
+    console.log(r);
+    res.send(r);
+  });
 });
