@@ -30,8 +30,6 @@ export const coreUpdate = async (db) => {
 
   const stringedEntireDb = entireDb.map(q => JSON.stringify(q.original));
 
-  // console.log(entireDb, stringedEntireDb);
-
   const newQuotes = quoteArray
     .map((q, i) => {
       let comparator = q;

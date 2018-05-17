@@ -59,7 +59,6 @@ const isAuthed = (req, res, next) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded && !err) {
-        console.log('correct token in header');
         return next();
       }
       return res.json({ error: err.message });

@@ -12,7 +12,6 @@ updateRouter.get('/', async (req, res) => {
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
   coreUpdate(db).then((r) => {
-    console.log(r);
     res.send(r);
   });
 });
