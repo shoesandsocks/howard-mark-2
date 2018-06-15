@@ -31,7 +31,7 @@ app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
-// app.locals.runBot(app.locals.mouthiness);
+app.locals.runBot(app.locals.mouthiness);
 
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
