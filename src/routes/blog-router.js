@@ -7,6 +7,7 @@ require('dotenv').config();
 export const blogRouter = express.Router();
 
 blogRouter.post('/notify', async (req, res) => {
+  console.log(req.body, process.env.WEBHOOK);
   const toSlack = {};
   if (req.body.email) {
     toSlack.email = req.body.email;
