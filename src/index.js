@@ -27,7 +27,7 @@ const app = express();
 runJobs();
 
 // Bot variables and functions, on 'locals' object
-app.locals.responderOn = false;
+app.locals.responderOn = true;
 app.locals.mouthiness = 21;
 app.locals.hushed = false;
 app.locals.runBot = runBot;
