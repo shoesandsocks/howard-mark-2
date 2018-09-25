@@ -49,9 +49,10 @@ app.use(express.json());
 *  N.B.: docs say, "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
 *        a load balancer (e.g. Heroku).""
 */
-if (process.env.NODE_ENV === 'production') {
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
-}
+// TODO: re-implement this when Linode server has SSL
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// }
 /**
  * AUTHORIZATION MIDDLEWARE
  */
