@@ -14,6 +14,7 @@ const randomQuote = channel =>
   howard('getQuotes', 1)
     .then((reply) => {
       const quote = reply[0].text; // array of 1
+      console.log(`Linode process here, generating a Random from slack-responder.js file: ${quote}`);
       return bot.postMessage(channel, quote, botParams);
     })
     .catch((e) => {
