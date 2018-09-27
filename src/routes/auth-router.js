@@ -28,7 +28,7 @@ authRouter.get('/', (req, res) => {
           },
         );
         userLogging(id, name, image_192);
-        return res.redirect(`/?token=${token}`);
+        return res.redirect(`https://hc-api.online?token=${token}`);
       }
       return res.send({ error: 'error getting response from Slack.' });
     })
