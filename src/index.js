@@ -3,7 +3,6 @@ import path from 'path';
 import cors from 'cors';
 import compression from 'compression';
 import jwt from 'jsonwebtoken';
-import enforce from 'express-sslify';
 import winston from 'winston';
 
 import { howardRouter } from './routes/howard-router';
@@ -11,7 +10,6 @@ import { howardSlackRouter } from './routes/howard-slack-router';
 import { cronRouter } from './routes/cron-router';
 import { authRouter } from './routes/auth-router';
 import { updateRouter } from './routes/update-router';
-import { blogRouter } from './routes/blog-router';
 
 import { runJobs } from './utils/cron-management';
 import { runBot, stopBot } from './utils/slack-responder';
@@ -104,15 +102,12 @@ app.use('/howardcron', isAuthed, cronRouter);
 // app.use('/howardcron', cronRouter);
 app.use('/oauth', authRouter);
 app.use('/howardupdate', isAuthed, updateRouter);
-app.use('/blog', blogRouter);
 
 /* next 2 lines send other routes to /client/build (front-end, built in h-m-2-frontend folder) */
 app.use('/', express.static(path.join(__dirname, '../client/build')));
 app.get('*', (req, res) =>
-  // console.log('star');
   res.sendFile('index.html', {
     root: path.join(__dirname, '../client/build'),
   }));
 
-/* start server */
 app.listen(port, () => winston.info(`On ${port}`));
