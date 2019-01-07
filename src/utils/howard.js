@@ -58,13 +58,14 @@ export const howard = async (query, argument) => {
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = async (input) => {
+    console.log(input);
     const numberOfQuotes = await db
       .collection('howard')
       .find({ 'original.text': { $exists: true } })
       .count();
     const allQuotesArray = await getQuotes(numberOfQuotes);
     const string = allQuotesArray.join('\n');
-    console.log(typeof allQuotesArray);
+    console.log(Array.isArray(allQuotesArray), typeof string);
     return m.seed(string, () => m.respond(input.toString(), 15).join(' '));
     // return markovResult;
   };
