@@ -20,7 +20,7 @@ export const howard = async (query, argument) => {
   const getAllTextItems = async () => {
     const array = await db
       .collection('howard')
-      .aggregate([{ $match: { 'original.episode': { $exists: true } } }])
+      .aggregate([{ $match: { 'original.text': { $exists: true } } }])
       .toArray();
     return array;
   };
