@@ -69,9 +69,9 @@ export const howard = async (query, argument) => {
   const string = arr.join('\n');
 
   const getMarkov = async (input) => {
-    console.log(string);
     const response = m.seed(string, () => m.respond(input.toString(), 15).join(' '));
-    return { response };
+    console.log(response);
+    return response;
     // return markovResult;
   };
 
