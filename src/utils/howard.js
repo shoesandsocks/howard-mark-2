@@ -1,6 +1,7 @@
 import MongoClient from 'mongodb';
-import { markov } from './markov';
-import { triadMaker } from './triadMaker';
+import markov from 'markov';
+
+const m = markov(1);
 
 require('dotenv').config();
 
@@ -56,15 +57,16 @@ export const howard = async (query, argument) => {
   };
 
   /* getMarkov(string) returns markov from string seed */
-  const getMarkov = async (string) => {
+  const getMarkov = async (input) => {
     const numberOfQuotes = await db
       .collection('howard')
       .find({ 'original.text': { $exists: true } })
       .count();
     const allQuotesArray = await getQuotes(numberOfQuotes);
-    const triads = triadMaker(allQuotesArray.map(q => q.text));
-    const markovResult = markov(string, triads);
-    return markovResult;
+    const string = allQuotesArray.join('\n');
+
+    return m.seed(string, () => m.respond(input.toString(), 15).join(' '));
+    // return markovResult;
   };
 
   let returnValue;
