@@ -11,7 +11,7 @@ howardRouter.post('/', async (req, res) => {
   if (!argument || !kind) {
     return res.json({ error: 'missing info' });
   }
-  if (typeof kind !== 'number' || kind < 1 || kind > 6) {
+  if (typeof kind !== 'number' || kind < 1 || kind > 7) {
     return res.json({ error: 'bad kind' });
   }
   try {
@@ -56,6 +56,14 @@ howardRouter.post('/', async (req, res) => {
         } catch (e) {
           return res.json({
             error: `Something went wrong 'markiving' that: ${e}`,
+          });
+        }
+      case 6:
+        try {
+          return res.json({ response: await howard('getAll')})
+        } catch (e) {
+          return res.json({
+            error: `Something went wrong getting all original.text items: ${e}`;
           });
         }
       default:

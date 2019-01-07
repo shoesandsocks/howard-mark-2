@@ -17,6 +17,13 @@ export const howard = async (query, argument) => {
     return theEp.original;
   };
 
+  const getAllTextItems = async () => {
+    const array = await db
+      .collection('howard')
+      .aggregate([{ $match: { 'original.episode': { $exists: true } } }])
+      .toArray();
+    return array;
+  };
   /* getRandomEpisode() returns an ep */
   const getRandomEpisode = async () => {
     const array = await db
@@ -62,6 +69,9 @@ export const howard = async (query, argument) => {
 
   let returnValue;
   switch (query) {
+    case 'getAll':
+      returnValue = await getAllTextItems();
+      break;
     case 'getEpisode':
       returnValue = await getEpisode(argument);
       break;
