@@ -64,7 +64,7 @@ export const howard = async (query, argument) => {
       .count();
     const allQuotesArray = await getQuotes(numberOfQuotes);
     const string = allQuotesArray.join('\n');
-
+    console.log(typeof allQuotesArray);
     return m.seed(string, () => m.respond(input.toString(), 15).join(' '));
     // return markovResult;
   };
