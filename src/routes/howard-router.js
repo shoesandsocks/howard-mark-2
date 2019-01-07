@@ -60,10 +60,10 @@ howardRouter.post('/', async (req, res) => {
         }
       case 6:
         try {
-          return res.json({ response: await howard('getAll')})
+          return res.json({ response: await howard('getAll') });
         } catch (e) {
           return res.json({
-            error: `Something went wrong getting all original.text items: ${e}`;
+            error: `Something went wrong getting all original.text items: ${e}`,
           });
         }
       default:
