@@ -73,7 +73,7 @@ export const howard = async (query, argument) => {
     return m.seed(string, async () => {
       response = await m.respond(input.toString(), 15).join(' ');
       console.log(response, ' hey');
-      return response;
+      return { response };
     });
     // return markovResult;
   };
