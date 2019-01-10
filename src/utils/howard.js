@@ -70,10 +70,15 @@ export const howard = async (query, argument) => {
   let getMarkovFn;
 
   m.seed(string, () => {
+    console.log('seeding');
     getMarkovFn = input => m.respond(input.toString(), 15).join(' ');
   });
 
-  const getMarkov = input => getMarkovFn(input);
+  const getMarkov = (input) => {
+    console.log('getting');
+    const result = getMarkovFn(input);
+    return { result };
+  };
 
   let returnValue;
   switch (query) {
