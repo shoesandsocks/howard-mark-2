@@ -1,8 +1,21 @@
 import MongoClient from 'mongodb';
 
-require('dotenv').config();
+const markov = require('markov');
 
-console.log('this is the howard.js file scope');
+const m = markov(1);
+
+const runSeed = async (db, getQuotes, input) => {
+  const numberOfQuotes = await db
+    .collection('howard')
+    .find({ 'original.text': { $exists: true } })
+    .count();
+  const allQuotesArray = await getQuotes(numberOfQuotes);
+
+  return [m.seed(allQuotesArray.join(' '), () => m.respond(input.toString()).join(' '))];
+};
+
+
+require('dotenv').config();
 
 export const howard = async (query, argument) => {
   if (!query) return null;
@@ -57,8 +70,9 @@ export const howard = async (query, argument) => {
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
+    runSeed(db, getQuotes, input);
     // should return an array
-    [{ text: 'hi' }, { text: 'hi12' }];
+    // [{ text: 'hi' }, { text: 'hi12' }];
 
   let returnValue;
   switch (query) {
