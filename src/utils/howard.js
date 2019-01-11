@@ -62,9 +62,7 @@ export const howard = async (query, argument) => {
     .find({ 'original.text': { $exists: true } })
     .count();
   const allQuotesArray = await getQuotes(numberOfQuotes);
-
-  const seedString = await allQuotesArray.map(o => o.text);
-  m.seed(seedString);
+  m.seed(allQuotesArray.map(o => o.text));
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
