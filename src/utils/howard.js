@@ -1,8 +1,11 @@
 import MongoClient from 'mongodb';
+import fs from 'fs';
 
 const markov = require('markov');
 
+const seedString = fs.readFileSync('./src/utils/data.txt');
 const m = markov(1);
+m.seed(seedString);
 
 require('dotenv').config();
 
@@ -57,12 +60,14 @@ export const howard = async (query, argument) => {
     return getQuoteObjects.map(q => q.quote);
   };
 
-  const numberOfQuotes = await db
-    .collection('howard')
-    .find({ 'original.text': { $exists: true } })
-    .count();
-  const allQuotesArray = await getQuotes(numberOfQuotes);
-  m.seed(allQuotesArray.map(o => o.text));
+  // DONT DELETE: useful for re-getting data.txt from time to time
+  // const numberOfQuotes = await db
+  //   .collection('howard')
+  //   .find({ 'original.text': { $exists: true } })
+  //   .count();
+  // const allQuotesArray = await getQuotes(numberOfQuotes);
+  // const data = allQuotesArray.map(o => o.text);
+  // fs.writeFileSync('./data.txt', data.join(' '), (err) => { console.log(err); });
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
