@@ -1,7 +1,6 @@
 import MongoClient from 'mongodb';
 import markov from 'markov';
 
-const m = markov(1);
 
 require('dotenv').config();
 
@@ -11,6 +10,7 @@ export const howard = async (query, argument) => {
 
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
+  const m = markov(1);
 
   /* getEpisode(num) return that ep */
   const getEpisode = async (n) => {
@@ -77,7 +77,7 @@ export const howard = async (query, argument) => {
   const getMarkov = (input) => {
     console.log('getting');
     const result = getMarkovFn(input);
-    return { result };
+    return result;
   };
 
   let returnValue;
