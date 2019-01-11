@@ -10,12 +10,12 @@ const runSeed = async (db, getQuotes, input) => {
     .find({ 'original.text': { $exists: true } })
     .count();
   const allQuotesArray = await getQuotes(numberOfQuotes);
-  console.log(allQuotesArray);
-  const seedString = allQuotesArray.forEach(o => o.text).join(' ');
-  const response = [];
+
+  const seedString = allQuotesArray.forEach(o => o.text);
+
   console.log(seedString);
-  m.seed(seedString, () => response.push(m.respond(input.toString()).join(' ')));
-  return setTimeout(() => response, 10000);
+  m.seed(seedString.join(' '));
+  return setTimeout(() => [m.respond(input.toString())], 10000);
 };
 
 
