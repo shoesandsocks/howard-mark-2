@@ -2,6 +2,8 @@ import MongoClient from 'mongodb';
 
 require('dotenv').config();
 
+console.log('this is the howard.js file scope');
+
 export const howard = async (query, argument) => {
   if (!query) return null;
   // argument sometimes optional (for now)
@@ -54,10 +56,9 @@ export const howard = async (query, argument) => {
   };
 
   /* getMarkov(string) returns markov from string seed */
-  const getMarkov = (input) => {
-    console.log('getting');
-    return [{ text: 'hi' }, { text: 'hi12' }];
-  };
+  const getMarkov = input =>
+    // should return an array
+    [{ text: 'hi' }, { text: 'hi12' }];
 
   let returnValue;
   switch (query) {
