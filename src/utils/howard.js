@@ -11,11 +11,13 @@ const runSeed = async (db, getQuotes, input) => {
     .count();
   const allQuotesArray = await getQuotes(numberOfQuotes);
 
-  const seedString = allQuotesArray.forEach(o => o.text);
+  const seedString = await allQuotesArray.forEach(o => o.text);
 
-  console.log(seedString);
-  m.seed(seedString.join(' '));
-  return setTimeout(() => [m.respond(input.toString())], 10000);
+  return setTimeout(() => {
+    console.log(seedString);
+    m.seed(seedString.join(' '));
+    return [m.respond(input.toString())];
+  }, 10000);
 };
 
 
