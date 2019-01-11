@@ -4,25 +4,6 @@ const markov = require('markov');
 
 const m = markov(1);
 
-const runSeed = async (db, getQuotes, input) => {
-  const numberOfQuotes = await db
-    .collection('howard')
-    .find({ 'original.text': { $exists: true } })
-    .count();
-  const allQuotesArray = await getQuotes(numberOfQuotes);
-
-  const seedString = allQuotesArray.map(o => o.text);
-
-  setTimeout(() => {
-    // console.log(seedString);
-    m.seed(seedString.join(' '));
-    const res = m.respond(input.toString());
-    console.log(res);
-    return res;
-  }, 15000);
-};
-
-
 require('dotenv').config();
 
 export const howard = async (query, argument) => {
@@ -76,9 +57,19 @@ export const howard = async (query, argument) => {
     return getQuoteObjects.map(q => q.quote);
   };
 
+  const numberOfQuotes = await db
+    .collection('howard')
+    .find({ 'original.text': { $exists: true } })
+    .count();
+  const allQuotesArray = await getQuotes(numberOfQuotes);
+
+  const seedString = await allQuotesArray.map(o => o.text);
+  m.seed(await seedString);
+
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
-    runSeed(db, getQuotes, input);
+    [m.respond(input).join(' ')];
+    // runSeed(db, getQuotes, input);
     // should return an array
     // [{ text: 'hi' }, { text: 'hi12' }];
 
