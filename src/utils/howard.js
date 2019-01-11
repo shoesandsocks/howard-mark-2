@@ -13,10 +13,12 @@ const runSeed = async (db, getQuotes, input) => {
 
   const seedString = allQuotesArray.map(o => o.text);
 
-  return setTimeout(() => {
-    console.log(seedString);
+  setTimeout(() => {
+    // console.log(seedString);
     m.seed(seedString.join(' '));
-    return [m.respond(input.toString())];
+    const res = m.respond(input.toString());
+    console.log(res);
+    return res;
   }, 15000);
 };
 
