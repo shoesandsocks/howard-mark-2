@@ -1,6 +1,4 @@
 import MongoClient from 'mongodb';
-import markov from 'markov';
-
 
 require('dotenv').config();
 
@@ -10,7 +8,6 @@ export const howard = async (query, argument) => {
 
   const client = await MongoClient.connect(process.env.MLAB);
   const db = await client.db('howard');
-  const m = markov(1);
 
   /* getEpisode(num) return that ep */
   const getEpisode = async (n) => {
@@ -57,27 +54,9 @@ export const howard = async (query, argument) => {
   };
 
   /* getMarkov(string) returns markov from string seed */
-
-  /* one-time setup for markoving */
-  const numberOfQuotes = await db
-    .collection('howard')
-    .find({ 'original.text': { $exists: true } })
-    .count();
-  const allQuotesArray = await getQuotes(numberOfQuotes);
-  const arr = [];
-  allQuotesArray.forEach(obj => arr.push(obj.text));
-  const string = arr.join('\n');
-
   const getMarkov = (input) => {
     console.log('getting');
-    let getMarkovFn;
-
-    m.seed(string, () => {
-      console.log('seeding');
-      getMarkovFn = inpt => m.respond(inpt.toString(), 15).join(' ');
-    });
-    const result = getMarkovFn(input);
-    return result;
+    return 'hi';
   };
 
   let returnValue;
