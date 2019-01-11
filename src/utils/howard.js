@@ -56,7 +56,7 @@ export const howard = async (query, argument) => {
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = (input) => {
     console.log('getting');
-    return { result: [{ text: 'hi' }, { text: 'hi12' }] };
+    return [{ text: 'hi' }, { text: 'hi12' }];
   };
 
   let returnValue;
