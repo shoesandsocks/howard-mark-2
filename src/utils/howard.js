@@ -64,7 +64,7 @@ export const howard = async (query, argument) => {
   const allQuotesArray = await getQuotes(numberOfQuotes);
 
   const seedString = await allQuotesArray.map(o => o.text);
-  m.seed(await seedString);
+  m.seed(seedString);
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
