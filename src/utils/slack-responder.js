@@ -71,8 +71,16 @@ export const runBot = (mouthiness) => {
     }
     if (channel === 'C61L2R7N2') {
       // #debug
-      return howard('getMarkov', text).then(markov =>
-        bot.postMessage(channel, markov.text, botParams));
+      try {
+        return howard('getMarkov', text).then(markov =>
+          bot.postMessage(channel, markov[0].text, botParams));
+      } catch (e) {
+        return bot.postMessage(
+          channel,
+          'something broke in the markov part of the slack-responder file',
+          botParams,
+        );
+      }
     }
     if (channel === 'C3ZHJ4K9Q') {
       // #testing ->
