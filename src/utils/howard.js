@@ -67,15 +67,15 @@ export const howard = async (query, argument) => {
   const arr = [];
   allQuotesArray.forEach(obj => arr.push(obj.text));
   const string = arr.join('\n');
-  let getMarkovFn;
-
-  m.seed(string, () => {
-    console.log('seeding');
-    getMarkovFn = input => m.respond(input.toString(), 15).join(' ');
-  });
 
   const getMarkov = (input) => {
     console.log('getting');
+    let getMarkovFn;
+
+    m.seed(string, () => {
+      console.log('seeding');
+      getMarkovFn = inpt => m.respond(inpt.toString(), 15).join(' ');
+    });
     const result = getMarkovFn(input);
     return result;
   };
