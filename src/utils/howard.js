@@ -5,7 +5,7 @@ const markov = require('markov');
 
 const seedString = fs.readFileSync('./src/utils/data.txt');
 const m = markov(3);
-console.log('calling m.seed now: ');
+console.log('calling m.seed now:  ');
 m.seed(seedString);
 
 require('dotenv').config();
