@@ -4,7 +4,7 @@ import fs from 'fs';
 const markov = require('markov');
 
 const seedString = fs.readFileSync('./src/utils/data.txt');
-const m = markov(3);
+const m = markov(2);
 console.log('calling m.seed now:  ');
 m.seed(seedString);
 
@@ -72,7 +72,7 @@ export const howard = async (query, argument) => {
 
   /* getMarkov(string) returns markov from string seed */
   const getMarkov = input =>
-    [{ text: m.respond(input, 24).join(' ') }];
+    [{ text: m.respond(input, 16).join(' ') }];
     // runSeed(db, getQuotes, input);
     // should return an array
     // [{ text: 'hi' }, { text: 'hi12' }];
