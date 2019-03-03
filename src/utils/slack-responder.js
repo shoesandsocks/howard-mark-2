@@ -69,7 +69,7 @@ export const runBot = (mouthiness) => {
     ) {
       return null;
     }
-    console.log(data);
+    // console.log(data);
     if (channel === 'C61L2R7N2') {
       // #debug
       console.log('debug channel - responding');
