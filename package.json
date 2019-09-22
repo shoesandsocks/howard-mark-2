@@ -12,7 +12,7 @@
   "author": "RL Brown, rlbrown72@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "backpack-core": "^0.8.3",
     "compression": "^1.7.2",
     "cors": "^2.8.4",
