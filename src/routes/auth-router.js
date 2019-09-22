@@ -15,7 +15,6 @@ authRouter.get('/', (req, res) => {
   axios
     .get(oauthURL)
     .then((response) => {
-      console.log(response.data);
       if (response.data.ok) {
         const {
           user: { id, name, image_192 }, // eslint-disable-line
