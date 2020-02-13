@@ -14,7 +14,10 @@ export const howard = async (query, argument) => {
   if (!query) return null;
   // argument sometimes optional (for now)
 
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
 
   /* getEpisode(num) return that ep */

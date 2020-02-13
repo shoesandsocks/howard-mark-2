@@ -9,7 +9,10 @@ require('dotenv').config();
 export const updateRouter = express.Router();
 
 updateRouter.get('/', async (req, res) => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
   coreUpdate(db).then((r) => {
     res.send(r);

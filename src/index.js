@@ -10,7 +10,7 @@ import { howardSlackRouter } from './routes/howard-slack-router';
 import { cronRouter } from './routes/cron-router';
 import { authRouter } from './routes/auth-router';
 import { updateRouter } from './routes/update-router';
-
+import { podcastRouter } from './routes/podcast-router';
 import { runJobs } from './utils/cron-management';
 import { runBot, stopBot } from './utils/slack-responder';
 
@@ -99,6 +99,7 @@ app.get('/howardsettings', isAuthed, (req, res) => {
 app.use('/howard', howardRouter);
 app.use('/howardslack', howardSlackRouter);
 app.use('/howardcron', isAuthed, cronRouter);
+app.use('/podcast', podcastRouter);
 // app.use('/howardcron', cronRouter);
 app.use('/oauth', authRouter);
 app.use('/howardupdate', isAuthed, updateRouter);
