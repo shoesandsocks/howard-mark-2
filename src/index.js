@@ -32,10 +32,17 @@ app.locals.runBot = runBot;
 app.locals.stopBot = stopBot;
 app.locals.runBot(app.locals.mouthiness);
 
+setInterval(() => {
+  if (!app.locals.responderOn) return false;
+  app.locals.stopBot();
+  app.locals.runBot(app.locals.mouthiness);
+  return true;
+}, 7200000);
+
 /* gzip text, i guess? this is new to me, this project */
 app.use(compression());
 
-/* basic cors usage to allow other domains to hit routes. TODO: maybe revisit this */
+/* basic cors usage to allow other domains to hit routes. */
 app.use(cors());
 
 /* to read the `.body` on POST data coming in, not sure if need both, but... */
@@ -47,7 +54,7 @@ app.use(express.json());
 *  N.B.: docs say, "Use enforce.HTTPS({ trustProtoHeader: true }) in case you are behind
 *        a load balancer (e.g. Heroku).""
 */
-// TODO: re-implement this when Linode server has SSL
+
 // if (process.env.NODE_ENV === 'production') {
 //   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 // }
