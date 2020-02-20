@@ -3,7 +3,10 @@ import MongoClient from 'mongodb';
 require('dotenv').config();
 
 export const getJobs = async () => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
   try {
     const allJobs = await db
@@ -21,7 +24,10 @@ export const getJobs = async () => {
 };
 
 export const getOneUsersJobs = async (tumblr_id) => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
   try {
     const oneUsersJobs = await db
@@ -41,7 +47,10 @@ export const getOneUsersJobs = async (tumblr_id) => {
 };
 
 export const saveJob = async (tumblr_id, newJob) => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
 
   try {
@@ -62,7 +71,10 @@ export const saveJob = async (tumblr_id, newJob) => {
 };
 
 export const deleteJob = async (tumblr_id, jobName) => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
   const uniqueName = tumblr_id + jobName;
   try {

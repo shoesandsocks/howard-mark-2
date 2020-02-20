@@ -3,7 +3,10 @@ import MongoClient from 'mongodb';
 require('dotenv').config();
 
 export const userLogging = async (id, name, image) => {
-  const client = await MongoClient.connect(process.env.MLAB);
+  const client = await MongoClient.connect(process.env.MLAB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   const db = await client.db('howard');
 
   db.collection('webusers').updateOne(
