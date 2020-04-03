@@ -52,7 +52,7 @@ export const coreUpdate = async (db) => {
     })
     .filter(a => a !== null);
 
-  newQuotes.forEach(q => db.collection('howard').insert({ original: q }));
+  newQuotes.forEach(q => db.collection('howard').insertOne({ original: q }));
   depQuotes.forEach((q) => {
     const someKey = Object.keys(q)[0];
     const itsValue = q[someKey];

@@ -14,7 +14,10 @@ updateRouter.get('/', async (req, res) => {
     useNewUrlParser: true,
   });
   const db = await client.db('howard');
-  coreUpdate(db).then((r) => {
-    res.send(r);
-  });
+  coreUpdate(db)
+    .then(r => res.send(r))
+    .catch((ex) => {
+      console.log('coreUpdate failed in update-router file', ex);
+      res.json({ message: 'sorry charly' });
+    });
 });
