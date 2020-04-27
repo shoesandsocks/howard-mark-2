@@ -24,14 +24,15 @@
     "mongodb": "^3.5.3",
     "node-fetch": "^2.6.0",
     "node-schedule": "^1.3.2",
-    "slackbots": "^1.2.0",
+    "slackbots": "github:shoesandsocks/slack-bot-api",
     "winston": "^2.4.4"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.3"
+    "eslint-plugin-react": "^7.19.0"
   }
 }

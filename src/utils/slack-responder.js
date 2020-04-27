@@ -10,16 +10,22 @@ const botParams = {
   icon_emoji: ':howard:',
 };
 
-const randomQuote = channel =>
+const randomQuote = (channel) =>
   howard('getQuotes', 1)
     .then((reply) => {
       const quote = reply[0].text; // array of 1
-      console.log(`Linode process here, generating a Random from slack-responder.js file: ${quote}`);
+      console.log(
+        `Linode process here, generating a Random from slack-responder.js file: ${quote}`,
+      );
       return bot.postMessage(channel, quote, botParams);
     })
     .catch((e) => {
       winston.error('randomQuote fn broke: ', e);
-      return bot.postMessage(channel, 'Howard is offline or something.', botParams);
+      return bot.postMessage(
+        channel,
+        'Howard is offline or something.',
+        botParams,
+      );
     });
 
 const search = (textToSearch, channel) =>
@@ -56,6 +62,14 @@ export const stopBot = () => {
 };
 
 export const runBot = (mouthiness) => {
+  bot.on('goodbye', () => bot.reconnect());
+  /*
+   * `on goodbye` is why I forked a newer fork of the original slackbots pkg
+   * see: https://github.com/mishk0/slack-bot-api/pull/149
+   * theoretically, this stops Howard from dying
+   * which I think is related to the 8-hour period mentioned here:
+   * https://api.slack.com/events/goodbye
+   */
   bot.on('start', () => winston.info('Server started; linked to slack'));
   bot.on('message', async (data) => {
     const { text, channel } = data;
@@ -74,8 +88,9 @@ export const runBot = (mouthiness) => {
       // #debug
       console.log('debug channel - responding');
       try {
-        return howard('getMarkov', text).then(markov =>
-          bot.postMessage(channel, markov[0].text, botParams));
+        return howard('getMarkov', text).then((markov) =>
+          bot.postMessage(channel, markov[0].text, botParams),
+        );
       } catch (e) {
         return bot.postMessage(
           channel,

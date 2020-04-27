@@ -5,7 +5,7 @@ const markov = require('markov');
 
 const seedString = fs.readFileSync('./src/utils/data.txt');
 const m = markov(2);
-console.log('calling m.seed now:  ');
+// console.log('calling m.seed now:  ')
 m.seed(seedString);
 
 require('dotenv').config();
@@ -22,7 +22,9 @@ export const howard = async (query, argument) => {
 
   /* getEpisode(num) return that ep */
   const getEpisode = async (n) => {
-    const theEp = await db.collection('howard').findOne({ 'original.episode': n });
+    const theEp = await db
+      .collection('howard')
+      .findOne({ 'original.episode': n });
     return theEp.original;
   };
 
@@ -37,7 +39,10 @@ export const howard = async (query, argument) => {
   const getRandomEpisode = async () => {
     const array = await db
       .collection('howard')
-      .aggregate([{ $match: { 'original.episode': { $exists: true } } }, { $sample: { size: 1 } }])
+      .aggregate([
+        { $match: { 'original.episode': { $exists: true } } },
+        { $sample: { size: 1 } },
+      ])
       .toArray();
     return array[0].original;
   };
@@ -52,16 +57,19 @@ export const howard = async (query, argument) => {
         { $match: { deprecated: { $exists: false } } },
       ])
       .toArray();
-    return foundQuotes.map(q => q.original);
+    return foundQuotes.map((q) => q.original);
   };
 
   /* getQuotes() returns the quotes View */
   const getQuotes = async (n) => {
     const getQuoteObjects = await db
       .collection('canon')
-      .aggregate([{ $match: { 'quote.text': { $exists: true } } }, { $sample: { size: n } }])
+      .aggregate([
+        { $match: { 'quote.text': { $exists: true } } },
+        { $sample: { size: n } },
+      ])
       .toArray();
-    return getQuoteObjects.map(q => q.quote);
+    return getQuoteObjects.map((q) => q.quote);
   };
 
   // DONT DELETE: useful for re-getting data.txt from time to time
@@ -74,11 +82,10 @@ export const howard = async (query, argument) => {
   // fs.writeFileSync('./data.txt', data.join(' '), (err) => { console.log(err); });
 
   /* getMarkov(string) returns markov from string seed */
-  const getMarkov = input =>
-    [{ text: m.respond(input, 16).join(' ') }];
-    // runSeed(db, getQuotes, input);
-    // should return an array
-    // [{ text: 'hi' }, { text: 'hi12' }];
+  const getMarkov = (input) => [{ text: m.respond(input, 16).join(' ') }];
+  // runSeed(db, getQuotes, input);
+  // should return an array
+  // [{ text: 'hi' }, { text: 'hi12' }];
 
   let returnValue;
   switch (query) {
