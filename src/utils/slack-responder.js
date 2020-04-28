@@ -62,7 +62,10 @@ export const stopBot = () => {
 };
 
 export const runBot = (mouthiness) => {
-  bot.on('goodbye', () => bot.reconnect());
+  bot.on('goodbye', () => {
+    console.log('received a GOODBYE event from the slack RTM. Reconnecting...');
+    bot.reconnect();
+  });
   /*
    * `on goodbye` is why I forked a newer fork of the original slackbots pkg
    * see: https://github.com/mishk0/slack-bot-api/pull/149
