@@ -62,27 +62,29 @@ export const stopBot = () => {
 };
 
 export const runBot = (mouthiness) => {
-  bot.on('goodbye', () => {
-    console.log('received a GOODBYE event from the slack RTM. Reconnecting...');
-    bot.reconnect();
-  });
-  /*
-   * `on goodbye` is why I forked a newer fork of the original slackbots pkg
-   * see: https://github.com/mishk0/slack-bot-api/pull/149
-   * theoretically, this stops Howard from dying
-   * which I think is related to the 8-hour period mentioned here:
-   * https://api.slack.com/events/goodbye
-   */
   bot.on('start', () => winston.info('Server started; linked to slack'));
   bot.on('message', async (data) => {
-    const { text, channel } = data;
+    const { text, channel, type, bot_id, subtype } = data;
+    if (type === 'goodbye') {
+      /*
+       * `goodbye` is why I forked a newer fork of the original slackbots pkg
+       * see: https://github.com/mishk0/slack-bot-api/pull/149
+       * theoretically, this stops Howard from dying
+       * which I think is related to the 8-hour period mentioned here:
+       * https://api.slack.com/events/goodbye
+       */
+      console.log(
+        'received a GOODBYE message-type from the slack RTM. Reconnecting...',
+      );
+      return bot.reconnect();
+    }
     if (
-      data.type !== 'message' ||
-      !data.type ||
-      data.bot_id ||
+      type !== 'message' ||
+      !type ||
+      bot_id ||
       !text ||
-      data.subtype === 'file_share' ||
-      data.text.split(' ')[0].indexOf('/') > -1
+      subtype === 'file_share' ||
+      text.split(' ')[0].indexOf('/') > -1
     ) {
       return null;
     }
